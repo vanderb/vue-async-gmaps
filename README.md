@@ -26,7 +26,7 @@ yarn add @vanderb/vue-async-gmaps
 #### Implementation
 
 ```javascript
-import VueAsyncGmaps from 'vue-async-gmaps'
+import VueAsyncGmaps from '@vanderb/vue-async-gmaps'
 
 Vue.component('VueAsyncGmaps', VueAsyncGmaps)
 
