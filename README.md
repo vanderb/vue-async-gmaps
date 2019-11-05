@@ -50,7 +50,7 @@ Insert your google-maps api-key via `api-key`-property
 
 Insert your google-maps config via `:config`-property
 ```html
-<vue-async-gmaps ... config="{center: {lat: 50.935173, lng: 6.953101}, zoom: 11}"/>
+<vue-async-gmaps ... :config="{center: {lat: 50.935173, lng: 6.953101}, zoom: 11}"/>
 ```
 ### Button
 
