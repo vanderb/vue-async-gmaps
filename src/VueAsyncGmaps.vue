@@ -37,6 +37,12 @@
                     };
                 }
             },
+            markers: {
+                type: Array,
+                default() {
+                    return []
+                }
+            },
             buttonText: {
                 type: String,
                 default: "Load"
@@ -53,6 +59,7 @@
         data() {
             return {
                 initialized: false,
+                mapsMarker: []
             };
         },
         methods: {
@@ -60,6 +67,16 @@
                 try {
                     const google = await LoadGoogleMaps(this.apiKey);
                     this.map = new google.maps.Map(this.$el, this.config);
+                    // Added markers
+                    this.markers.forEach(marker => {
+                        marker.map = this.map;
+
+                        if (marker.animation) {
+                            marker.animation = google.maps.Animation[marker.animation]
+                        }
+
+                        this.mapsMarker.push(new google.maps.Marker(marker));
+                    })
 
                     this.initialized = true;
                 } catch (error) {

@@ -66,6 +66,12 @@ var script = {
                 };
             }
         },
+        markers: {
+            type: Array,
+            default: function default$2() {
+                return []
+            }
+        },
         buttonText: {
             type: String,
             default: "Load"
@@ -82,13 +88,26 @@ var script = {
     data: function data() {
         return {
             initialized: false,
+            mapsMarker: []
         };
     },
     methods: {
         initGoogleMaps: async function initGoogleMaps() {
+            var this$1 = this;
+
             try {
                 var google = await LoadGoogleMaps(this.apiKey);
                 this.map = new google.maps.Map(this.$el, this.config);
+                // Added markers
+                this.markers.forEach(function (marker) {
+                    marker.map = this$1.map;
+
+                    if (marker.animation) {
+                        marker.animation = google.maps.Animation[marker.animation];
+                    }
+
+                    this$1.mapsMarker.push(new google.maps.Marker(marker));
+                });
 
                 this.initialized = true;
             } catch (error) {
@@ -243,7 +262,7 @@ var __vue_staticRenderFns__ = [];
   /* style */
   var __vue_inject_styles__ = function (inject) {
     if (!inject) { return }
-    inject("data-v-13d9ef99_0", { source: ".vue-async-gmaps.default{width:100%;min-height:350px;display:flex;align-items:center;justify-content:center}", map: undefined, media: undefined });
+    inject("data-v-6bbf5f2d_0", { source: ".vue-async-gmaps.default{width:100%;min-height:350px;display:flex;align-items:center;justify-content:center}", map: undefined, media: undefined });
 
   };
   /* scoped */

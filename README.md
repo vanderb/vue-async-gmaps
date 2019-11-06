@@ -52,6 +52,18 @@ Insert your google-maps config via `:config`-property
 ```html
 <vue-async-gmaps ... :config="{center: {lat: 50.935173, lng: 6.953101}, zoom: 11}"/>
 ```
+
+### Markers
+To add markers just add markers-property with array of marker-objects
+* position = {lat: xxx, lng: xxx} (required)
+* title = Marker-Title in Tooltip (required)
+* icon (optional)
+* animation [DROP, BOUNCE] (optional, BOUNCE not fully supported yet)
+
+```html
+<vue-async-gmaps ... :markers="[{position: {lat: 50.935173, lng: 6.953101}, title: 'My Marker'}]"/>
+```
+
 ### Button
 
 You can change button-text and class
