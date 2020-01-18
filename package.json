@@ -1,6 +1,6 @@
 {
   "name": "@vanderb/vue-async-gmaps",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Load google-maps on click",
   "license": "MIT",
   "main": "dist/vue-async-gmaps.umd.js",

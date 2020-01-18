@@ -115,8 +115,8 @@
             <div class="iw_content">
               ${details.description ? `<div>${details.description}</div>`: ''}
               ${details.address ? `<div>${details.address}</div>`: ''}
-              ${details.zip && details.city ? `<div>${details.zip} ${details.town}</div>`: ''}
-              ${details.link && details.town ? `<a href="${details.link_text}" class="link link--external" target="_blank">${details.link_text}</a>`: ''}
+              ${details.zip && details.city ? `<div>${details.zip} ${details.city}</div>`: ''}
+              ${details.link && details.link_text ? `<a href="${details.link}" class="link link--external" target="_blank">${details.link_text}</a>`: ''}
             </div>
           </div>
         `
