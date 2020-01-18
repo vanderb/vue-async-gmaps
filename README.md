@@ -56,12 +56,20 @@ Insert your google-maps config via `:config`-property
 ### Markers
 To add markers just add markers-property with array of marker-objects
 * position = {lat: xxx, lng: xxx} (required)
-* title = Marker-Title in Tooltip (required)
-* icon (optional)
+* icon = {} (optional)
+    * url = Marker-Icon-Url
+* details = {} (optional)
+    * title
+    * description
+    * address
+    * zip
+    * city
+    * link
+    * link_text
 * animation [DROP, BOUNCE] (optional, BOUNCE not fully supported yet)
 
 ```html
-<vue-async-gmaps ... :markers="[{position: {lat: 50.935173, lng: 6.953101}, title: 'My Marker'}]"/>
+<vue-async-gmaps ... :markers="[{position: {lat: 50.935173, lng: 6.953101}, details: {title: 'My Marker'}}]"/>
 ```
 
 ### Button

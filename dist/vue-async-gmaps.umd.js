@@ -52,75 +52,104 @@
   //
 
   var script = {
-      name: "VueAsyncGmaps",
-      props: {
-          apiKey: {
-              type: String,
-              default: ""
-          },
-          config: {
-              type: Object,
-              default: function default$1() {
-                  return {
-                      center: {
-                          lat: 50.935173,
-                          lng: 6.953101
-                      },
-                      zoom: 11,
-                      disableDefaultUI: true,
-                      scrollwheel: false
-                  };
-              }
-          },
-          markers: {
-              type: Array,
-              default: function default$2() {
-                  return []
-              }
-          },
-          buttonText: {
-              type: String,
-              default: "Load"
-          },
-          buttonClass: {
-              type: String,
-              default: "btn btn-info"
-          },
-          withCss: {
-              type: Boolean,
-              default: true
-          }
+    name: "VueAsyncGmaps",
+    props: {
+      apiKey: {
+        type: String,
+        default: ""
       },
-      data: function data() {
+      config: {
+        type: Object,
+        default: function default$1() {
           return {
-              initialized: false,
-              mapsMarker: []
+            center: {
+              lat: 50.935173,
+              lng: 6.953101
+            },
+            zoom: 11,
+            disableDefaultUI: true,
+            scrollwheel: false
           };
+        }
       },
-      methods: {
-          initGoogleMaps: async function initGoogleMaps() {
-              var this$1 = this;
-
-              try {
-                  var google = await LoadGoogleMaps(this.apiKey);
-                  this.map = new google.maps.Map(this.$el, this.config);
-                  // Added markers
-                  this.markers.forEach(function (marker) {
-                      marker.map = this$1.map;
-
-                      if (marker.animation) {
-                          marker.animation = google.maps.Animation[marker.animation];
-                      }
-
-                      this$1.mapsMarker.push(new google.maps.Marker(marker));
-                  });
-
-                  this.initialized = true;
-              } catch (error) {
-                  console.error(error);
-              }
-          }
+      markers: {
+        type: Array,
+        default: function default$2() {
+          return []
+        }
+      },
+      buttonText: {
+        type: String,
+        default: "Load"
+      },
+      buttonClass: {
+        type: String,
+        default: "btn btn-info"
+      },
+      withCss: {
+        type: Boolean,
+        default: true
       }
+    },
+    data: function data() {
+      return {
+        initialized: false,
+        mapsMarker: []
+      };
+    },
+    methods: {
+      initGoogleMaps: async function initGoogleMaps() {
+        var this$1 = this;
+
+        try {
+          var google = await LoadGoogleMaps(this.apiKey);
+          this.map = new google.maps.Map(this.$el, this.config);
+
+          // Added markers
+          this.markers.forEach(function (marker) {
+            marker.map = this$1.map;
+
+            if (marker.animation) {
+              marker.animation = google.maps.Animation[marker.animation];
+            }
+
+            var mapMarker = new google.maps.Marker(marker);
+
+            if(marker.details) {
+
+              var infowindow = new google.maps.InfoWindow({
+                content: this$1.getInfoWindowTemplate(marker.details)
+              });
+
+              mapMarker.addListener('click', function () {
+                infowindow.open(this$1.map, mapMarker);
+              });
+
+              google.maps.event.addListener(infowindow, 'domready', function () {
+                var el = document.querySelector('.gm-style-iw');
+                el.classList.add('info-window');
+                var child = el.previousElementSibling || el.previousSibling;
+                if(child) {
+                  child.remove();
+                }
+              });
+
+            }
+
+            this$1.mapsMarker.push(mapMarker);
+
+          });
+
+          this.initialized = true;
+        } catch (error) {
+          console.error(error);
+        }
+      },
+      getInfoWindowTemplate: function getInfoWindowTemplate(details) {
+        return ("\n        <div id=\"iw_content\">\n          " + (details.title ? ("<div class=\"iw_title\">" + (details.title) + "</div>"): '') + "\n          <div class=\"iw_content\">\n            " + (details.description ? ("<div>" + (details.description) + "</div>"): '') + "\n            " + (details.address ? ("<div>" + (details.address) + "</div>"): '') + "\n            " + (details.zip && details.city ? ("<div>" + (details.zip) + " " + (details.town) + "</div>"): '') + "\n            " + (details.link && details.town ? ("<a href=\"" + (details.link_text) + "\" class=\"link link--external\" target=\"_blank\">" + (details.link_text) + "</a>"): '') + "\n          </div>\n        </div>\n      ")
+      },
+
+    }
   };
 
   function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
@@ -268,7 +297,7 @@
     /* style */
     var __vue_inject_styles__ = function (inject) {
       if (!inject) { return }
-      inject("data-v-6bbf5f2d_0", { source: ".vue-async-gmaps.default{width:100%;min-height:350px;display:flex;align-items:center;justify-content:center}", map: undefined, media: undefined });
+      inject("data-v-0ec956d2_0", { source: ".vue-async-gmaps.default{width:100%;min-height:350px;display:flex;align-items:center;justify-content:center}.vue-async-gmaps .info-window{background-color:#fff;color:#333;font-size:14px;line-height:1.4}.vue-async-gmaps .info-window>div{padding:1rem;min-width:240px}.vue-async-gmaps .info-window .iw_title{font-family:Helvetica,Arial,sans-serif;font-size:18px;font-weight:500}.vue-async-gmaps .info-window+div{right:18px!important;top:12px!important}", map: undefined, media: undefined });
 
     };
     /* scoped */
