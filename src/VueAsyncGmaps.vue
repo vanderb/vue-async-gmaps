@@ -103,6 +103,13 @@
 
           })
 
+
+          const overlay = new google.maps.OverlayView();
+          overlay.draw = function () {
+            this.getPanes().markerLayer.id='agm-markers';
+          };
+          overlay.setMap(this.map);
+
           this.initialized = true;
         } catch (error) {
           console.error(error);

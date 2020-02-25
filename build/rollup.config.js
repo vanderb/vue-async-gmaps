@@ -3,6 +3,8 @@ import buble from '@rollup/plugin-buble';
 import commonjs from "rollup-plugin-commonjs";
 import replace from "@rollup/plugin-replace";
 
+import babel from 'rollup-plugin-babel';
+
 const config = {
   input: "src/VueAsyncGmaps.vue",
   output: {
@@ -11,6 +13,17 @@ const config = {
   },
   transforms: {asyncAwait: false},
   plugins: [
+    babel({
+      babelrc: false,
+      presets: [
+        [
+        '@babel/preset-env', {
+            modules: false,
+            "targets": {"node": "10"}
+          }
+        ]
+      ],
+    }),
     replace({
       "process.env.NODE_ENV": JSON.stringify("production")
     }),

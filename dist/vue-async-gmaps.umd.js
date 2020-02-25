@@ -9,48 +9,40 @@
    * https://markus.oberlehner.net/
    * Article: https://markus.oberlehner.net/blog/using-the-google-maps-api-with-vue/
    */
-
   var CALLBACK_NAME = 'gmapsCallback';
-
   var initialized = !!window.google;
   var resolveInitPromise;
-  var rejectInitPromise;
-  // This promise handles the initialization
+  var rejectInitPromise; // This promise handles the initialization
   // status of the google maps script.
+
   var initPromise = new Promise(function (resolve, reject) {
     resolveInitPromise = resolve;
     rejectInitPromise = reject;
   });
-
   function LoadGoogleMaps(apiKey) {
-
     // If Google Maps already is initialized
     // the `initPromise` should get resolved
     // eventually.
     if (initialized) { return initPromise; }
-
-    initialized = true;
-    // The callback function is called by
+    initialized = true; // The callback function is called by
     // the Google Maps script if it is
     // successfully loaded.
-    window[CALLBACK_NAME] = function () { return resolveInitPromise(window.google); };
 
-    // We inject a new script tag into
+    window[CALLBACK_NAME] = function () { return resolveInitPromise(window.google); }; // We inject a new script tag into
     // the `<head>` of our HTML to load
     // the Google Maps script.
+
+
     var script = document.createElement('script');
     script.async = true;
     script.defer = true;
     script.src = "https://maps.googleapis.com/maps/api/js?key=" + apiKey + "&callback=" + CALLBACK_NAME;
     script.onerror = rejectInitPromise;
     document.querySelector('head').appendChild(script);
-
     return initPromise;
-
   }
 
   //
-
   var script = {
     name: "VueAsyncGmaps",
     props: {
@@ -60,6 +52,7 @@
       },
       config: {
         type: Object,
+
         default: function default$1() {
           return {
             center: {
@@ -71,12 +64,15 @@
             scrollwheel: false
           };
         }
+
       },
       markers: {
         type: Array,
+
         default: function default$2() {
-          return []
+          return [];
         }
+
       },
       buttonText: {
         type: String,
@@ -91,21 +87,22 @@
         default: true
       }
     },
+
     data: function data() {
       return {
         initialized: false,
         mapsMarker: []
       };
     },
+
     methods: {
       initGoogleMaps: async function initGoogleMaps() {
         var this$1 = this;
 
         try {
           var google = await LoadGoogleMaps(this.apiKey);
-          this.map = new google.maps.Map(this.$el, this.config);
+          this.map = new google.maps.Map(this.$el, this.config); // Added markers
 
-          // Added markers
           this.markers.forEach(function (marker) {
             marker.map = this$1.map;
 
@@ -115,39 +112,42 @@
 
             var mapMarker = new google.maps.Marker(marker);
 
-            if(marker.details) {
-
+            if (marker.details) {
               var infowindow = new google.maps.InfoWindow({
                 content: this$1.getInfoWindowTemplate(marker.details)
               });
-
               mapMarker.addListener('click', function () {
                 infowindow.open(this$1.map, mapMarker);
               });
-
               google.maps.event.addListener(infowindow, 'domready', function () {
                 var el = document.querySelector('.gm-style-iw');
                 el.classList.add('info-window');
                 var child = el.previousElementSibling || el.previousSibling;
-                if(child) {
+
+                if (child) {
                   child.remove();
                 }
               });
-
             }
 
             this$1.mapsMarker.push(mapMarker);
-
           });
+          var overlay = new google.maps.OverlayView();
 
+          overlay.draw = function () {
+            this.getPanes().markerLayer.id = 'agm-markers';
+          };
+
+          overlay.setMap(this.map);
           this.initialized = true;
         } catch (error) {
           console.error(error);
         }
       },
+
       getInfoWindowTemplate: function getInfoWindowTemplate(details) {
-        return ("\n        <div id=\"iw_content\">\n          " + (details.title ? ("<div class=\"iw_title\">" + (details.title) + "</div>"): '') + "\n          <div class=\"iw_content\">\n            " + (details.description ? ("<div>" + (details.description) + "</div>"): '') + "\n            " + (details.address ? ("<div>" + (details.address) + "</div>"): '') + "\n            " + (details.zip && details.city ? ("<div>" + (details.zip) + " " + (details.city) + "</div>"): '') + "\n            " + (details.link && details.link_text ? ("<a href=\"" + (details.link) + "\" class=\"link link--external\" target=\"_blank\">" + (details.link_text) + "</a>"): '') + "\n          </div>\n        </div>\n      ")
-      },
+        return ("\n        <div id=\"iw_content\">\n          " + (details.title ? ("<div class=\"iw_title\">" + (details.title) + "</div>") : '') + "\n          <div class=\"iw_content\">\n            " + (details.description ? ("<div>" + (details.description) + "</div>") : '') + "\n            " + (details.address ? ("<div>" + (details.address) + "</div>") : '') + "\n            " + (details.zip && details.city ? ("<div>" + (details.zip) + " " + (details.city) + "</div>") : '') + "\n            " + (details.link && details.link_text ? ("<a href=\"" + (details.link) + "\" class=\"link link--external\" target=\"_blank\">" + (details.link_text) + "</a>") : '') + "\n          </div>\n        </div>\n      ");
+      }
 
     }
   };
@@ -238,11 +238,13 @@
   var normalizeComponent_1 = normalizeComponent;
 
   var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
   function createInjector(context) {
     return function (id, style) {
       return addStyle(id, style);
     };
   }
+
   var HEAD = document.head || document.getElementsByTagName('head')[0];
   var styles = {};
 
@@ -297,7 +299,7 @@
     /* style */
     var __vue_inject_styles__ = function (inject) {
       if (!inject) { return }
-      inject("data-v-51e22c9c_0", { source: ".vue-async-gmaps.default{width:100%;min-height:350px;display:flex;align-items:center;justify-content:center}.vue-async-gmaps .info-window{background-color:#fff;color:#333;font-size:14px;line-height:1.4}.vue-async-gmaps .info-window>div{padding:1rem;min-width:240px}.vue-async-gmaps .info-window .iw_title{font-family:Helvetica,Arial,sans-serif;font-size:18px;font-weight:500}.vue-async-gmaps .info-window+div{right:18px!important;top:12px!important}", map: undefined, media: undefined });
+      inject("data-v-4eecd2b5_0", { source: ".vue-async-gmaps.default{width:100%;min-height:350px;display:flex;align-items:center;justify-content:center}.vue-async-gmaps .info-window{background-color:#fff;color:#333;font-size:14px;line-height:1.4}.vue-async-gmaps .info-window>div{padding:1rem;min-width:240px}.vue-async-gmaps .info-window .iw_title{font-family:Helvetica,Arial,sans-serif;font-size:18px;font-weight:500}.vue-async-gmaps .info-window+div{right:18px!important;top:12px!important}", map: undefined, media: undefined });
 
     };
     /* scoped */
